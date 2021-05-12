@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -16,29 +17,26 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
 
-
-private const val PATH_PARAM = "path_param"
-
 class CategoriesFragment : Fragment() {
-    private var path: ArrayList<Int> = ArrayList(0)
-
-    lateinit var currentCategory: Category
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.getIntegerArrayList(PATH_PARAM)?.let {
-            path = it
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_categories, container, false)
+        val model: CategoriesViewModel by activityViewModels()
 
-        val model: CategoriesViewModel by viewModels()
-        model.getCategories().observe(viewLifecycleOwner, Observer<Category> { allCategories ->
-            currentCategory = getCurrentCategory(allCategories, path)
+        val itemClickListener = object : CategoryAdapter.ViewHolderClickListener {
+            override fun onViewHolderClicked(position: Int) {
+                model.addToNavigationPath(position)
+            }
+        }
+
+        val path: ArrayList<Int> = model.getNavigationPath().value ?: ArrayList()
+
+        model.parentCategory.observe(viewLifecycleOwner, { allCategories ->
+
+            val currentCategory: Category = getCurrentCategory(allCategories, path)
             toolbar.title = currentCategory.label
 
             val imageUrl = currentCategory.image
@@ -50,15 +48,17 @@ class CategoriesFragment : Fragment() {
                         image.setImageBitmap(bmp)
                     }
                 }
-
             } else {
                 image.visibility = View.GONE
             }
 
             val children: List<Category>? = currentCategory.children
             if (children != null) {
-                recycler_view.adapter = CategoryAdapter(activity as Activity, children, path)
-                recycler_view.layoutManager = LinearLayoutManager(context)
+                recycler_view.apply {
+                    adapter =
+                        CategoryAdapter(activity as Activity, children, path, itemClickListener)
+                    layoutManager = LinearLayoutManager(context)
+                }
             }
         })
         return view
@@ -74,21 +74,10 @@ class CategoriesFragment : Fragment() {
         for (int in path) {
             currentCategory =
                 currentCategory.children?.get(int) ?: Category().apply {
-                    label = "Error: ${path.toString()}"
+                    label = "Error: $path"
                 }
         }
         return currentCategory
     }
 
-    companion object {
-        /**
-         * Creates new a [CategoryFragment] that can by used by the [FragmentManager] to initiate a new [Fragment] for listing categories.
-         */
-        fun newInstance(path: ArrayList<Int>) =
-            CategoriesFragment().apply {
-                arguments = Bundle().apply {
-                    putIntegerArrayList(PATH_PARAM, ArrayList(path))
-                }
-            }
-    }
 }

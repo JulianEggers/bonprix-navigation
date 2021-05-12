@@ -18,6 +18,8 @@ class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+
         assertEquals("de.julianeggers.bonprix", appContext.packageName)
     }
 }

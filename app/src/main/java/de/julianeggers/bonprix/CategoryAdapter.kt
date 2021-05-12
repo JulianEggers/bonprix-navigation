@@ -3,6 +3,7 @@ package de.julianeggers.bonprix
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -13,8 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 class CategoryAdapter(
     private val activity: Activity,
     private val categories: List<Category>,
-    private val path: ArrayList<Int>
+    private val path: ArrayList<Int>,
+    private val itemClickListener: ViewHolderClickListener
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+
+    interface ViewHolderClickListener{
+        fun onViewHolderClicked(position : Int)
+    }
 
     class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView
@@ -38,15 +44,7 @@ class CategoryAdapter(
             val url = category.url
 
             if (children != null) {
-                val newPath: ArrayList<Int> = ArrayList(path).apply {
-                    add(position) //Add this click to the [newPath] for the next [Fragment].
-                }
-                activity.supportFragmentManager.beginTransaction().apply {
-                    setCustomAnimations(R.anim.slide_enter, R.anim.slide_enter)  //Out animation not working here: https://stackoverflow.com/a/22693619
-                    add(R.id.container, CategoriesFragment.newInstance(newPath), null)
-                    addToBackStack(null)
-                    commit()
-                }
+                itemClickListener.onViewHolderClicked(position)
             } else {
                 activity.supportFragmentManager.beginTransaction().apply {
                     add(R.id.container, WebViewFragment.newInstance(url), null)
