@@ -39,19 +39,7 @@ class CategoryAdapter(
         val category: Category = categories[position]
         holder.textView.text = category.label
         holder.itemView.setOnClickListener {
-
-            val children = category.children
-            val url = category.url
-
-            if (children != null) {
-                itemClickListener.onViewHolderClicked(position)
-            } else {
-                activity.supportFragmentManager.beginTransaction().apply {
-                    add(R.id.container, WebViewFragment.newInstance(url), null)
-                    addToBackStack(null)
-                    commit()
-                }
-            }
+            itemClickListener.onViewHolderClicked(position)
         }
     }
 

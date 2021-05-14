@@ -6,14 +6,14 @@ Auch wenn dies in dieser kleinen App Arbeit erleichtern würde, habe ich mich da
 
 ### View
 Es gibt 2 Fragments: Ein Fragment zum Darstellen der Kategorien in einem RecyclerView und ein Fragment zum Öffnen der Website in einem WebView.
-Der Pfad durch den Category-Tree speichere ich in einer IntList, wodurch jedes Fragment seinen individuellen Pfad kennt, um die richtigen Kategorien anzuzeigen.
+Der Pfad durch den Category-Tree wird in einer IntList gespeichert, wodurch jedes Fragment seinen individuellen Pfad und damit die Kategorien, die angzeigt werden müssen, kennt.
 
 ### ViewModel
-Das ViewModel enthält die Datenstruktur, die von dem Fragment abgerufen werden kann.
+Das ViewModel enthält die Datenstruktur, die von dem Fragment abgerufen werden kann. Zusaetzlich werden weitere informationen in dem ViewModel gespeichert, die für die Anzeige der Kategorien relevant sind.
 Das ViewModel lädt automatisch die Daten über das Repository, sobald es aufgerufen wird.
 
 ### Repository
-Das Repository organisiert den Zugriff die Daten. In der aktuellen Version lädt es nur die Daten der API. In späteren Versionen sollte es jedoch so ausgebaut werden, dass die geladen Daten in einer lokalen Datenbank gecached werden, sodass eine Navigation auch ohne Internetverbindung möglich ist.
+Das Repository organisiert den Zugriff auf die Daten. In der aktuellen Version lädt es nur die Daten der API. In späteren Versionen sollte es jedoch so ausgebaut werden, dass die geladen Daten in einer lokalen Datenbank gecached werden, sodass eine Navigation auch ohne Internetverbindung möglich ist.
 Das Repository updated also die Datenbank und liefert dem ViewModel immer die aktuellen, verfügbaren Daten.
 
 ## Tests

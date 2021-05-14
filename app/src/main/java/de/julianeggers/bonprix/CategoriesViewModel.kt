@@ -35,6 +35,23 @@ class CategoriesViewModel : ViewModel() {
         }
     }
 
+
+    /**
+     * Determines the current [Category] to be used as parent for the current view.
+     * This is accomplished by using the [path] array to find the child [Category] that is currently being focused.
+     * This function returns the [Category] that is the parent category for this Fragment or a [Category] with the label [Error] in case an error occurred.
+     */
+    fun getCurrentCategory(): Category {
+        val errorCategory = Category().apply { label = "Error" }
+        var currentCategory: Category = parentCategory.value ?: return errorCategory
+        val currentPath = navigationPath.value ?: return currentCategory
+
+        for (position in currentPath) {
+            currentCategory = currentCategory.children?.get(position) ?: return errorCategory
+        }
+        return currentCategory
+    }
+
     /**
      * Returns an observable [LiveData] object holding a list that represents the navigation path of the user.
      */

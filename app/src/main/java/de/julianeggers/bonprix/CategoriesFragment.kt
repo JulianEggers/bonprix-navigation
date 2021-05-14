@@ -36,7 +36,7 @@ class CategoriesFragment : Fragment() {
 
         model.parentCategory.observe(viewLifecycleOwner, { allCategories ->
 
-            val currentCategory: Category = getCurrentCategory(allCategories, path)
+            val currentCategory: Category = model.getCurrentCategory()
             toolbar.title = currentCategory.label
 
             val imageUrl = currentCategory.image
@@ -62,22 +62,6 @@ class CategoriesFragment : Fragment() {
             }
         })
         return view
-    }
-
-    /**
-     * Determines the current [Category] to be used as parent for the current view.
-     * This is accomplished by using the [path] array to find the child [Category] that is currently being focused.
-     * This function returns the [Category] that is the parent category for this Fragment or a [Category] with the lable [Error] in case an error occured.
-     */
-    private fun getCurrentCategory(parent: Category, path: ArrayList<Int>): Category {
-        var currentCategory: Category = parent
-        for (int in path) {
-            currentCategory =
-                currentCategory.children?.get(int) ?: Category().apply {
-                    label = "Error: $path"
-                }
-        }
-        return currentCategory
     }
 
 }
