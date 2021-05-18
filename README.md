@@ -18,4 +18,4 @@ Das Repository organisiert den Zugriff auf die Daten. In der aktuellen Version l
 Das Repository updated also die Datenbank und liefert dem ViewModel immer die aktuellen, verfügbaren Daten.
 
 ## Tests
-Da ich mich bisher speziell mit UI-Tests nur sehr wenig beschäftigt habe und weil mir wegen der Masterarbeit die Zeit fehlt mich in die Thematik einzuarbeiten, habe ich mich gegen das UI-Testen entschieden.
+Da ich mich bisher speziell mit UI-Tests und dem Mocken in Android nur sehr wenig beschäftigt habe und weil mir wegen der Masterarbeit die Zeit fehlt mich in die Thematik einzuarbeiten, habe ich mich gegen das Testen entschieden. Grundsätzlich muss hier aber natürlich getestet werden.
